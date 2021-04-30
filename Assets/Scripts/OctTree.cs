@@ -13,25 +13,24 @@ public class OctTree : MonoBehaviour
     int initialSize = 1;
 
     [SerializeField]
-    float minSize = 0.5f;
-
-    [SerializeField]
-    float objectSize = 0.05f;
+    int minSize = 1;
 
     [SerializeField]
     int numObjects = 1000;
 
+    [SerializeField]
+    GameObject gridObject;
+
     void Start() 
     {
-        top = new OctTreeNode(Mathf.Pow(2, initialSize), transform.position, objectLimit, minSize);
+        int nodeSize = (int)Mathf.Pow(2, initialSize);
+        top = new OctTreeNode(nodeSize, transform.position, objectLimit, minSize);
 
         for(int i = 0; i < numObjects; i++) {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            Vector3 objLocation =  new Vector3(Random.Range(transform.position.x, nodeSize), Random.Range(transform.position.y, nodeSize), Random.Range(transform.position.z, nodeSize));
+            gridObject = Instantiate(gridObject, objLocation, Quaternion.identity);
 
-            sphere.transform.localScale = new Vector3(objectSize, objectSize, objectSize);
-            sphere.transform.position = new Vector3(Random.Range(top.origin.x, top.size), Random.Range(top.origin.y, top.size), Random.Range(top.origin.z, top.size));
-
-            Add(sphere);
+            Add(gridObject);
         }
     }
 
@@ -39,7 +38,7 @@ public class OctTree : MonoBehaviour
     {
         top.Draw();
         
-        if(Input.GetKeyDown("space"))
+        if(Input.GetKeyDown("delete"))
         {
             top.Remove();
         }

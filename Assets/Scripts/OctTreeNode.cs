@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class OctTreeNode
 {
-    public float size, halfSize;
-    public Vector3 origin;
+    int size, halfSize;
+    Vector3 origin;
 
     int objectLimit;
-    float minSize;
+    int minSize;
 
     OctTreeNode BottomLeftBack;
     OctTreeNode TopLeftBack;
@@ -22,17 +22,19 @@ public class OctTreeNode
 
     public List<GameObject> objects = new List<GameObject>();
 
-    Color objectColor = new Color(Random.Range(0.3f,3f), Random.Range(0.3f, 3f), Random.Range(0.3f, 3f));
+    Color objectColor;
 
-    public OctTreeNode(float size, Vector3 coords, int objectLimit, float minSize)
+    public OctTreeNode(int size, Vector3 coords, int objectLimit, int minSize)
     {
         this.size = size;
         halfSize = size/2;
         this.origin = coords;
         this.objectLimit = objectLimit;
-        this.minSize = minSize;
-    }
+        this.minSize = (minSize > 0 ? minSize : 1);
+        
 
+        objectColor = new Color(Random.Range(0.3f,3f), Random.Range(0.3f, 3f), Random.Range(0.3f, 3f));
+    }
     
     public void Draw() {
         Vector3 end = new Vector3(origin.x + size, origin.y + size, origin.z + size);
@@ -137,7 +139,7 @@ public class OctTreeNode
 
             objects.Add(obj);
 
-            if(objects.Count > objectLimit && size/2 >= minSize) {
+            if(objects.Count > objectLimit && halfSize >= minSize) {
                 Split();
             }
         }
