@@ -2,50 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OctTree : MonoBehaviour
+public class OctTree
 {
     OctTreeNode top;
 
-    [SerializeField]
-    int objectLimit = 10;
+    int objectLimit;
+    int minSize;
 
-    [SerializeField]
-    int initialSize = 1;
-
-    [SerializeField]
-    int minSize = 1;
-
-    [SerializeField]
-    int numObjects = 1000;
-
-    [SerializeField]
-    GameObject gridObject;
-
-    void Start() 
+    public OctTree(Vector3 origin, int startSize, int minSize, int objectLimit)
     {
-        int nodeSize = (int)Mathf.Pow(2, initialSize);
-        top = new OctTreeNode(nodeSize, transform.position, objectLimit, minSize);
-
-        for(int i = 0; i < numObjects; i++) {
-            Vector3 objLocation =  new Vector3(Random.Range(transform.position.x, nodeSize), Random.Range(transform.position.y, nodeSize), Random.Range(transform.position.z, nodeSize));
-            gridObject = Instantiate(gridObject, objLocation, Quaternion.identity);
-
-            Add(gridObject);
-        }
+        top = new OctTreeNode(origin, startSize, minSize, objectLimit);
     }
 
-    void Update()
+    public void Draw()
     {
         top.Draw();
-        
-        if(Input.GetKeyDown("delete"))
-        {
-            top.Remove();
-        }
     }
 
     public void Add(GameObject obj)
     {
         top.Add(obj);
+    }
+
+    public void Remove()
+    {
+        top.Remove();
+    }
+
+    public void Expand(Vector3 location)
+    {
+        //expand so that the coordinates fit inside the OctTree
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class OctTreeNode
 {
     int size, halfSize;
+    
     Vector3 origin;
 
     int objectLimit;
@@ -24,11 +25,11 @@ public class OctTreeNode
 
     Color objectColor;
 
-    public OctTreeNode(int size, Vector3 coords, int objectLimit, int minSize)
+    public OctTreeNode(Vector3 coords, int size, int minSize, int objectLimit)
     {
         this.size = size;
         halfSize = size/2;
-        this.origin = coords;
+        origin = coords;
         this.objectLimit = objectLimit;
         this.minSize = (minSize > 0 ? minSize : 1);
         
@@ -232,15 +233,15 @@ public class OctTreeNode
     private void Split() {
         Vector3 mid = new Vector3(origin.x + halfSize, origin.y + halfSize, origin.z + halfSize);
 
-        BottomLeftBack = new OctTreeNode(halfSize, origin, objectLimit, minSize);
-        TopLeftBack = new OctTreeNode(halfSize, new Vector3(origin.x, mid.y, origin.z), objectLimit, minSize);
-        TopRightBack = new OctTreeNode(halfSize, new Vector3(mid.x, mid.y, origin.z), objectLimit, minSize);
-        BottomRightBack = new OctTreeNode(halfSize, new Vector3(mid.x, origin.y, origin.z), objectLimit, minSize);
+        BottomLeftBack = new OctTreeNode(origin, halfSize, minSize, objectLimit);
+        TopLeftBack = new OctTreeNode(new Vector3(origin.x, mid.y, origin.z), halfSize, minSize, objectLimit);
+        TopRightBack = new OctTreeNode(new Vector3(mid.x, mid.y, origin.z), halfSize, minSize, objectLimit);
+        BottomRightBack = new OctTreeNode(new Vector3(mid.x, origin.y, origin.z), halfSize, minSize, objectLimit);
 
-        BottomLeftFront = new OctTreeNode(halfSize, new Vector3(origin.x, origin.y, mid.z), objectLimit, minSize);
-        TopLeftFront = new OctTreeNode(halfSize, new Vector3(origin.x, mid.y, mid.z), objectLimit, minSize);
-        TopRightFront = new OctTreeNode(halfSize, mid, objectLimit, minSize);
-        BottomRightFront = new OctTreeNode(halfSize, new Vector3(mid.x, origin.y, mid.z), objectLimit, minSize);
+        BottomLeftFront = new OctTreeNode(new Vector3(origin.x, origin.y, mid.z), halfSize, minSize, objectLimit);
+        TopLeftFront = new OctTreeNode(new Vector3(origin.x, mid.y, mid.z), halfSize, minSize, objectLimit);
+        TopRightFront = new OctTreeNode(mid, halfSize, minSize, objectLimit);
+        BottomRightFront = new OctTreeNode(new Vector3(mid.x, origin.y, mid.z), halfSize, minSize, objectLimit);
 
         while(objects.Count > 0) {
             GameObject obj = objects[0];
